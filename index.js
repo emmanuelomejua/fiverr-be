@@ -2,7 +2,7 @@
 
 const express = require('express');
 const cors = require('cors')
-const {log, error} = require('console')
+const { log, error } = require('console')
 const { json, urlencoded } = express
 const morgan = require('morgan')
 const helmet = require('helmet')
@@ -11,6 +11,9 @@ const connectDB = require('./config')
 
 const app = express();
 connectDB()
+
+//routes import
+const { movieRoute } = require('./routes/index')
 
 
 //crosss origin resource
@@ -27,7 +30,7 @@ app.use(cookieParser())
 
 
 //Routes use here
-
+app.use('/api/movies', movieRoute)
 
 
 const port = process.env.PORT
