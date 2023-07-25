@@ -1,3 +1,5 @@
+'use strict';
+
 const Movies = require('../models/Movies')
 
 const getMovies = async (req, res) => {
