@@ -3,44 +3,45 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-//encrypt password
-const encryptedPassword = (password) => {
-    const hashedpassword = bcrypt.hashSync(password, bcrypt.genSalt(10), null)
-    return hashedpassword;
-}
+const { createError } = require('../middlewares/createError');
 
 //register
-const Register = async (req, res) => {
-    const userExists = await User.findOne({email: req.body.email})
-    if(!userExists){
-        try {
-            const newUser = await User.create({
-                ...req.body,
-                password: encryptedPassword(password)
-            })
-            const user = await newUser.save()
-            const { password, ...otherDetails } = user._doc
-            res.status(201).json(otherDetails)
-        } catch (error) {
-            res.status(500).json(error.message)
+const Register = async (req, res, next) => {
+
+    try {
+       
+        const userExists = await User.findOne({email: req.body.email})
+        if(!userExists){
+            const salt = await bcrypt.genSalt(10)
+            const hash = await bcrypt.hash(req.body.password, salt)
+            try {
+                const newUser = await User.create({
+                    ...req.body,
+                    password: hash
+                })
+                const user = await newUser.save()
+                const { password, ...otherDetails } = user._doc
+                res.status(201).json(otherDetails)
+            } catch (error) {
+                res.status(500).json(error.message)
+            }
+        } else {
+            return next(createError(403, 'User already exists, please login'))
         }
-    } else {
-        res.status(403).json('User already exists, please login')
+    } catch (error) {
+         res.status(500).json(error.message)
     }
 }
 
 
 //login
-const Login = async (req, res) => {
+const Login = async (req, res, next) => {
 
     const user = await User.findOne({email: req.body.email})
-    console.log(user)
+    
     if(user){
         try {
             const isCorrect = await bcrypt.compare(req.body.password, user.password);
-
-            console.log(isCorrect)
             if(isCorrect){
                 const token = jwt.sign({
                     id: user._id,
@@ -55,7 +56,7 @@ const Login = async (req, res) => {
                 .json(otherDetails)
                 
             } else {
-                res.status(401).send('Pls provide a valid username and password')
+                return next(createError(401, 'Pls provide a valid username and password'))
             }
         } catch (error) {
             res.status(500).json(error)
@@ -69,7 +70,10 @@ const Login = async (req, res) => {
 //logout
 const Logout = async (req, res) => {
     try {
-
+        res.clearCookie('accessToken', {
+            sameSite: 'none',
+            secure: true,
+        }).status(200).send('User has been logged out')
     } catch (error) {
         
     }

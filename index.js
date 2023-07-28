@@ -34,6 +34,13 @@ app.use(helmet())
 app.use(cookieParser())
 
 
+app.use((err, req, res, next) => {
+    const errorStatus = err.status || 500
+    const errMsg = err.message || 'Something went wrong'
+
+    return res.status(errorStatus).send(errMsg);
+})
+
 
 //Routes use here
 app.use('/api/movies', movieRoute)
