@@ -13,7 +13,7 @@ const app = express();
 connectDB()
 
 //routes import
-const { movieRoute, authRoute, gigRoute } = require('./routes/index')
+const { movieRoute, authRoute, gigRoute, orderRoute } = require('./routes/index')
 
 
 //crosss origin resource
@@ -46,6 +46,7 @@ app.use((err, req, res, next) => {
 app.use('/api/movies', movieRoute)
 app.use('/api/auth',  authRoute)
 app.use('/api/gig', gigRoute)
+app.use('/api/order', orderRoute)
 
 
 const port = process.env.PORT
