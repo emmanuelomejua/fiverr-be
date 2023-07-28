@@ -13,7 +13,7 @@ const app = express();
 connectDB()
 
 //routes import
-const { movieRoute, authRoute } = require('./routes/index')
+const { movieRoute, authRoute, gigRoute } = require('./routes/index')
 
 
 //crosss origin resource
@@ -21,7 +21,7 @@ app.use(cors({
     origin: 'http://localhost:3000', 
     credentials: true,
     methods: ['PUT, GET', 'PATCH', 'POST', 'DELETE'],
-    'Content-Type': 'Authorization'
+    allowedHeaders: ['Content-type', 'Authorization']
 
 }))
 
@@ -45,6 +45,7 @@ app.use((err, req, res, next) => {
 //Routes use here
 app.use('/api/movies', movieRoute)
 app.use('/api/auth',  authRoute)
+app.use('/api/gig', gigRoute)
 
 
 const port = process.env.PORT

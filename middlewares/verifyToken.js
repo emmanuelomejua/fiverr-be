@@ -1,8 +1,8 @@
-import { createError } from './createError';
+const createError = require('./createError')
 
 const jwt = require('jsonwebtoken')
 
-export const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
     const token = req.cookies.accessToken;
     if(!token){
         return next(createError(401, 'You are not authenticated '))
@@ -18,3 +18,6 @@ export const verifyToken = (req, res, next) => {
         })
     }
 }
+
+
+module.exports = { verifyToken }
