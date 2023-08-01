@@ -1,6 +1,7 @@
 const Gigs = require('../models/Gigs')
 const Order = require('../models/Order')
 
+//create an order
 const createOrder = async (req, res) => {
     try {
         const gig = await Gigs.findById(req.params.gigId)
@@ -22,6 +23,7 @@ const createOrder = async (req, res) => {
     }
 }
 
+//get an order
 const getOrder = async (req, res) => {
     try {
         

@@ -75,7 +75,7 @@ const Logout = async (req, res) => {
             secure: true,
         }).status(200).send('User has been logged out')
     } catch (error) {
-        
+        res.status(500).json(error)
     }
 }
 
