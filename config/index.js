@@ -10,7 +10,7 @@ const { log, error } = require('console')
 const connectDB = () => {
     set('strictQuery', true)
 
-    connect(process.env.DB_URI, {
+    connect(process.env.CONNECTION_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
