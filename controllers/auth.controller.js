@@ -11,9 +11,12 @@ const Register = async (req, res, next) => {
     try {
        
         const userExists = await User.findOne({email: req.body.email})
+
         if(!userExists){
+
             const salt = await bcrypt.genSalt(10)
             const hash = await bcrypt.hash(req.body.password, salt)
+
             try {
                 const newUser = await User.create({
                     ...req.body,
@@ -26,7 +29,7 @@ const Register = async (req, res, next) => {
                 res.status(500).json(error.message)
             }
         } else {
-            return next(createError(403, 'User already exists, please login'))
+            return next(createError(400, 'User already exists, please login'))
         }
     } catch (error) {
          res.status(500).json(error.message)
@@ -42,11 +45,14 @@ const Login = async (req, res, next) => {
     if(user){
         try {
             const isCorrect = await bcrypt.compare(req.body.password, user.password);
+
             if(isCorrect){
+
                 const token = jwt.sign({
                     id: user._id,
                     isSeller: user.isSeller
                 }, process.env.JWT_KEY)
+
                 const { password, ...otherDetails } = user._doc
                 
                 res.cookie('accessToken', token, {
@@ -59,7 +65,7 @@ const Login = async (req, res, next) => {
                 return next(createError(401, 'Pls provide a valid username and password'))
             }
         } catch (error) {
-            res.status(500).json(error)
+            res.status(500).json(error.message)
         }
     } else {
         res.status(404).json('Pls provide a valid username or password')

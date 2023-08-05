@@ -21,7 +21,7 @@ const gigSchema = new Schema({
     
     shortDesc: String,
 
-    deliveryTime: {type: Date, required: true},
+    deliveryTime: {type: Date, required: false},
 
     revisionNum: {type: Number, required: true },
 

@@ -15,7 +15,7 @@ const app = express();
 connectDB()
 
 //routes import
-const { movieRoute, authRoute, gigRoute, orderRoute, reviewRoute } = require('./routes/index')
+const { movieRoute, authRoute, gigRoute, orderRoute, reviewRoute, userRoute } = require('./routes/index')
 
 
 //crosss origin resource
@@ -35,7 +35,7 @@ app.use(morgan('common'))
 app.use(helmet())
 app.use(cookieParser())
 
-
+//error handling middleware
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500
     const errMsg = err.message || 'Something went wrong'
@@ -50,6 +50,7 @@ app.use('/api/auth',  authRoute)
 app.use('/api/gig', gigRoute)
 app.use('/api/order', orderRoute)
 app.use('/api/review', reviewRoute)
+app.use('/api/user', userRoute)
 
 
 const port = process.env.PORT

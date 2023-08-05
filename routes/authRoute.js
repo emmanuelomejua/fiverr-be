@@ -9,6 +9,6 @@ router.post('/login', Login);
 router.post('/register', Register);
 
 //logout
-router.post('/logout', Logout)
+router.post('/logout/:id', Logout)
 
 module.exports = router
