@@ -1,5 +1,6 @@
 const { getMovies } = require('../controllers/movies.controller')
 const {Router} = require('express')
+
 const router = Router()
 
 
