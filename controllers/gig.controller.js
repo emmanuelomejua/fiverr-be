@@ -5,13 +5,15 @@ const createGig = async (req, res, next) => {
     try {
 
         if(!req.isSeller){
+
             res.status(403).json('Sorry, only sellers can create gig')
-            // return next(createError(403, 'Sorry, only sellers can create gig'))
+            
         } else {
             const newGig = await Gig.create({
                 userId: req.userId,
                 ...req.body
             })
+
             try {
                 const gig = await newGig.save()
                 res.status(200).json(gig)
@@ -19,6 +21,7 @@ const createGig = async (req, res, next) => {
                 res.status(500).json(error.message)
             }
         }
+        
     } catch (error) {
         res.status(500).json(error.message)
     }
