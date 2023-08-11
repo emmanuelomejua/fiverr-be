@@ -15,12 +15,12 @@ const app = express();
 connectDB()
 
 //routes import
-const { movieRoute, authRoute, gigRoute, orderRoute, reviewRoute, userRoute } = require('./routes/index')
+const { movieRoute, authRoute, gigRoute, orderRoute, reviewRoute, userRoute } = require('./routes')
 
 
 //crosss origin resource
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    origin: '*', 
     credentials: true,
     methods: ['PUT, GET', 'PATCH', 'POST', 'DELETE'],
     allowedHeaders: ['Content-type', 'Authorization']

@@ -1,7 +1,8 @@
 const createError = require('../middlewares/createError')
 const Gig = require('../models/Gigs')
 
-const createGig = async (req, res, next) => {
+
+const createGig = async (req, res) => {
     try {
 
         if(!req.isSeller){
@@ -27,11 +28,16 @@ const createGig = async (req, res, next) => {
     }
 }
 
+
+//get single gig
 const getGig = async (req, res) => {
     try {
         const gig = await Gig.findById(req.params.id)
+
         if(!gig){
-            return next(createError(404, 'Gig not found'))
+
+            res.status(404).json('Gig not found')
+
         } else {
             res.status(200).json(gig)
         }
@@ -40,20 +46,37 @@ const getGig = async (req, res) => {
     }
 }
 
-const deleteGig = async (req, res, next) => {
+
+//delete a gig
+const deleteGig = async (req, res) => {
     try {
         const gig = await Gig.findById(req.params.id)
-        if(gig.userId !== req.userId){
-            return next(createError(403, 'You can only delete your gig'))
+
+        if(!gig){
+
+            res.status(404).json('Gig does not exist or has already been deleted')
+            
         } else {
-            await Gig.findByIdAndDelete(req.params.id)
-            res.status(200).json('Gig has been deleted!')
+            
+            if(gig.userId !== req.userId){
+            
+                res.status(403).json('You are not allowed to do this')
+            
+            } else {
+            
+                await Gig.findByIdAndDelete(req.params.id)
+                        
+                res.status(200).json('Gig has been deleted!')
+            }
+
         }
     } catch (error) {
         res.status(500).json(error.message)
     }
 }
 
+
+//get gigs
 const getGigs = async (req, res) => {
 
     const q = req.query;
@@ -67,11 +90,13 @@ const getGigs = async (req, res) => {
     }
 
     try {
-        const gig = await Gig.find(filters)
+        const gig = await Gig.find(filters).sort({_id: -1})
         res.status(200).json(gig)
     } catch (error) {
         res.status(500).json(error.message)
     }
 }
+
+
 
 module.exports = { createGig, deleteGig, getGig, getGigs }
