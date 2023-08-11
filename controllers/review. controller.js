@@ -8,25 +8,27 @@ const createReview = async (req, res, next) => {
 
     const newReview = Review.create({
         userId: req.userId,
-        gigId: req.body.userId,
+        gigId: req.body.gigId,
         desc: req.body.desc,
         star: req.body.star
     })
 
     try {
-        const review = await Review.findOne({
+        const review = await newReview.find({
             gigId: req.body.gigId,
             userId: req.userId
         })
         if(review) {
-            return next(createError(403, 'You have created review already'))
+
+            res.status(403).json('You have created review already')
+            
         } else {
             const savedReview = await newReview.save()
 
             await Gigs.findByIdAndUpdate(req.body.gigId, {
                 $inc: { totalStars: req.body.star, starNum: 1 }
             })
-            res.status(201).json(savedReview)
+            res.status(201).json('Review created succesfully!')
 
         }
     } catch (error) {
