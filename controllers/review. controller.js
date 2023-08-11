@@ -2,11 +2,13 @@ const { createError } = require('../middlewares/createError')
 const Gigs = require('../models/Gigs')
 const Review = require('../models/Review')
 
+
+
 const createReview = async (req, res, next) => {
 
     if(req.isSeller) return next(createError(403, 'Seller cannot create review'))
 
-    const newReview = Review.create({
+    const newReview = new Review({
         userId: req.userId,
         gigId: req.body.gigId,
         desc: req.body.desc,
@@ -14,7 +16,7 @@ const createReview = async (req, res, next) => {
     })
 
     try {
-        const review = await newReview.find({
+        const review = await Review.findOne({
             gigId: req.body.gigId,
             userId: req.userId
         })
@@ -28,7 +30,7 @@ const createReview = async (req, res, next) => {
             await Gigs.findByIdAndUpdate(req.body.gigId, {
                 $inc: { totalStars: req.body.star, starNum: 1 }
             })
-            res.status(201).json('Review created succesfully!')
+            res.status(201).json(savedReview)
 
         }
     } catch (error) {
@@ -36,15 +38,20 @@ const createReview = async (req, res, next) => {
     }
 }
 
-const getReview = async (req, res, next) => {
+
+
+const getReview = async (req, res) => {
 
     try {
         const reviews = await Review.find({gigId: req.body.gigId})
+
         res.status(200).json(reviews)
     } catch (error) {
         res.status(500).json(error.message)
     }
 }
+
+
 
 const deleteReview = async (req, res, next) => {
     try {

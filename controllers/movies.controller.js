@@ -2,6 +2,21 @@
 
 const Movies = require('../models/Movies')
 
+//create movie
+const createMovie = async (req, res) => {
+
+    try {
+        const movie = await Movies.create({
+            ...req.body
+        })
+        res.status(200).json(movie)
+    } catch (error) {
+        res.status(500).json(error.message)
+    }
+}
+
+
+//get movie
 const getMovies = async (req, res) => {
     try {
         const page = parseInt(req.query.page) - 1 || 0;
@@ -58,8 +73,8 @@ const getMovies = async (req, res) => {
 
         res.status(200).json(response)
     } catch (error) {
-        res.status(500).json(error)
+        res.status(500).json(error.message)
     }
 }
 
-module.exports = { getMovies }
+module.exports = { getMovies, createMovie }
