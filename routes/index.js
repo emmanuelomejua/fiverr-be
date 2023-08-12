@@ -4,6 +4,7 @@ const gigRoute = require('./gigRoute')
 const orderRoute = require('./orderRoute')
 const reviewRoute = require('./reviewRoute')
 const userRoute = require('./userRoute')
+const conversationRoute = require('./conversationRoute')
 
 module.exports = {
     movieRoute,
@@ -11,5 +12,6 @@ module.exports = {
     gigRoute,
     orderRoute,
     reviewRoute,
-    userRoute
+    userRoute,
+    conversationRoute
 }

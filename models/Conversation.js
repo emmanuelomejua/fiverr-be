@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { model, Schema } = mongoose
 
-const conversationSchema = new model({
+const conversationSchema = new  Schema({
     id: {
         type: String, 
         required: true, 
@@ -24,6 +24,7 @@ const conversationSchema = new model({
         required: true
     },
     lastMessage: String
+
 }, {
     timestamps: true
 })
