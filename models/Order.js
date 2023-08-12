@@ -10,7 +10,7 @@ const orderSchema = new Schema({
 
     title: String,
 
-    pricel: {
+    price: {
         type: Number, 
         required: true
     },
