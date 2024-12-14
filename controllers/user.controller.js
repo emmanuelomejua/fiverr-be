@@ -5,26 +5,24 @@ const User = require('../models/User')
 const deleteUser = async (req, res, next) => {
 
     try {
-        const user = await User.findById(req.params.id)
+        const user = await User.findById(req.params.id);
 
         if(!user){
-            return next(createError(404, 'User does not exist or already deleted'))
-        } else {
-
-            if(req.userId !==  user._id.toString()){
-
-                return next(createError(403, 'You can only delete your account'))
-
-            } else {
-
-                await User.findByIdAndDelete(req.params.id)
-
-                res.status(200).json('User deleted succesfully')
-            }
+            return next(createError(404, 'User does not exist or already deleted'));
         }
+
+        if(req.userid !== user._id.toString()){
+            return next(createError(401, 'Unauthorized access'));
+        }
+
+        await User.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({msg: 'User successfully deleted'})
     } catch (error) {
-        res.status(200).json(error.message)
+        res.status(500).json(error)
     }
+
+
 }
 
 
