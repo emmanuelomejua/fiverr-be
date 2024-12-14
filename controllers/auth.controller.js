@@ -19,18 +19,14 @@ const Register = async (req, res, next) => {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(req.body.password, salt)
 
-        try {
-            const newUser = await User.create({
-                ...req.body,
-                password: hash
-            })
-            const user = await newUser.save()
-            const { password, ...otherDetails } = user._doc
-            res.status(201).json(otherDetails)
-        } catch (error) {
-            res.status(500).json(error.message)
-        }
-        
+        const newUser = await User.create({
+            ...req.body,
+            password: hash
+        })
+        const user = await newUser.save()
+        const { password, ...otherDetails } = user._doc;
+        res.status(201).json(otherDetails)
+  
     } catch (error) {
          res.status(500).json(error.message)
     }
