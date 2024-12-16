@@ -20,10 +20,10 @@ const { movieRoute, authRoute, gigRoute, orderRoute, reviewRoute, userRoute, con
 
 //crosss origin resource
 app.use(cors({
-    origin: '*', 
+    origin: 'http://localhost:3000', 
     credentials: true,
     methods: ['PUT, GET', 'PATCH', 'POST', 'DELETE'],
-    allowedHeaders: ['Content-type', 'Authorization']
+    // allowedHeaders: ['Content-type', 'Authorization']
 
 }))
 

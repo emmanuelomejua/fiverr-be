@@ -7,21 +7,15 @@ const createGig = async (req, res) => {
 
         if(!req.isSeller){
 
-            res.status(403).json('Sorry, only sellers can create gig')
-            
-        } else {
-            const newGig = await Gig.create({
-                userId: req.userId,
-                ...req.body
-            })
-
-            try {
-                const gig = await newGig.save()
-                res.status(200).json(gig)
-            } catch (error) {
-                res.status(500).json(error.message)
-            }
+           return  res.status(403).json('Sorry, only sellers can create gig')
         }
+
+        const gig = await new Gig({
+            userId: req.userId,
+            ...req.body
+        })
+
+        res.status(200).json(gig)
         
     } catch (error) {
         res.status(500).json(error.message)
@@ -35,12 +29,10 @@ const getGig = async (req, res) => {
         const gig = await Gig.findById(req.params.id)
 
         if(!gig){
-
-            res.status(404).json('Gig not found')
-
-        } else {
-            res.status(200).json(gig)
-        }
+           return res.status(404).json('Gig not found')
+        } 
+        res.status(200).json(gig)
+        
     } catch (error) {
         res.status(500).json(error.message)
     }
@@ -53,23 +45,17 @@ const deleteGig = async (req, res) => {
         const gig = await Gig.findById(req.params.id)
 
         if(!gig){
-
-            res.status(404).json('Gig does not exist or has already been deleted')
+            return res.status(404).json('Gig does not exist or has already been deleted');
+        } 
             
-        } else {
-            
-            if(gig.userId !== req.userId){
-            
-                res.status(403).json('You are not allowed to do this')
-            
-            } else {
-            
-                await Gig.findByIdAndDelete(req.params.id)
-                        
-                res.status(200).json('Gig has been deleted!')
-            }
-
+        if(gig.userId !== req.userId){
+           return res.status(403).json('Unauthorized action')
         }
+            
+        await Gig.findByIdAndDelete(req.params.id)
+                
+        res.status(200).json('Gig has been deleted!')
+        
     } catch (error) {
         res.status(500).json(error.message)
     }

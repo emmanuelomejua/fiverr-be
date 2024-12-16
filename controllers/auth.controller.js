@@ -13,7 +13,7 @@ const Register = async (req, res, next) => {
         const userExists = await User.findOne({email: req.body.email})
 
         if(userExists){
-            return next(createError(400, 'User already exists, please login'))
+            return res.status(400).send('User already exists, please login')
         }
 
         const salt = await bcrypt.genSalt(10)
@@ -52,7 +52,7 @@ const Login = async (req, res, next) => {
         const token = jwt.sign({
             id: user._id,
             isSeller: user.isSeller
-        }, { expiresIn: '7d' }, process.env.JWT_KEY)
+        }, process.env.JWT_KEY,  { expiresIn: '7d' },)
 
         const { password, ...otherDetails } = user._doc
         
