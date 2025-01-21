@@ -10,10 +10,12 @@ const createGig = async (req, res) => {
            return  res.status(403).json('Sorry, only sellers can create gig')
         }
 
-        const gig = await new Gig({
+        const gig = new Gig({
             userId: req.userId,
             ...req.body
         })
+
+        await gig.save();
 
         res.status(200).json(gig)
         
@@ -76,7 +78,7 @@ const getGigs = async (req, res) => {
     }
 
     try {
-        const gig = await Gig.find(filters).sort({_id: -1})
+        const gig = await Gig.find(filters).sort({ [q.sort]: -1})
         res.status(200).json(gig)
     } catch (error) {
         res.status(500).json(error.message)

@@ -7,12 +7,13 @@ const router = require('express').Router()
 router.post('/', verifyToken, createGig)
 
 //delete gig
-router.delete('/:id', verifyToken, deleteGig)
-
-//get gig
-router.get('/find/:id', verifyToken, getGig)
+router.delete('/:id', verifyToken, deleteGig);
 
 //fetch all gigs
-router.get('/', verifyToken, getGigs)
+router.get('/', getGigs)
+
+//get gig
+router.get('/find/:id', getGig)
+
 
 module.exports = router

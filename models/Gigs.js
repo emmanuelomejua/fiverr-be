@@ -5,9 +5,15 @@ const gigSchema = new Schema({
 
     userId: {type: String, required: true},
 
+    title: {type: String, required: true},
+
     desc: {type: String, required: true },
 
     totalStars: {type: Number, default: 0 },
+
+    images: {
+        type: [String]
+    },
 
     starNum: {type: Number, default: 0 },
 
